@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Musae — Restez écrivain. L'IA s'occupe de votre visibilité.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1714;
+    --ink-soft: #3d3830;
+    --ink-faint: rgba(26,23,20,0.45);
+    --parchment: #f7f3ed;
+    --parchment-warm: #ede8e0;
+    --gold: #b8903c;
+    --gold-light: #d4a84b;
+    --gold-pale: rgba(184,144,60,0.15);
+    --sage: #7a8c7e;
+    --cream: #faf8f4;
+    --border: rgba(26,23,20,0.1);
+    --border-gold: rgba(184,144,60,0.35);
+    --fb-blue: #1877f2;
+    --ig-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; width: 100%;
+    z-index: 200;
+    padding: 1.4rem 5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(250,248,244,0.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem; font-weight: 300;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none;
+  }
+  .logo span { color: var(--gold); }
+  .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+  .nav-link {
+    font-size: 0.73rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-soft); text-decoration: none; font-weight: 400;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--ink); color: var(--cream);
+    padding: 0.6rem 1.6rem;
+    font-size: 0.73rem; letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none; font-family: 'Jost', sans-serif; font-weight: 400;
+    transition: background 0.3s, border-color 0.3s;
+    border: 1px solid var(--ink);
+  }
+  .nav-cta:hover { background: var(--gold); border-color: var(--gold); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    position: relative; overflow: hidden;
+  }
+
+  .hero-left {
+    padding: 11rem 3.5rem 6rem 5.5rem;
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative; z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; margin-bottom: 2.2rem;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: inline-block; width: 28px; height: 1px;
+    background: var(--gold); vertical-align: middle; margin-right: 0.8rem; margin-bottom: 1px;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 4.2vw, 4.2rem);
+    font-weight: 300; line-height: 1.18; color: var(--ink);
+    margin-bottom: 2.5rem;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-title strong { font-weight: 500; }
+
+  /* PROBLEM BOX */
+  .problem-box {
+    border-left: 2px solid var(--gold);
+    background: var(--gold-pale);
+    padding: 1.5rem 1.6rem;
+    margin-bottom: 2.8rem;
+    max-width: 430px;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.55s;
+    position: relative;
+  }
+  .problem-box::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px; background: var(--border-gold);
+  }
+  .problem-box::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px; background: var(--border-gold);
+  }
+  .problem-box p {
+    font-size: 0.9rem; line-height: 1.75; color: var(--ink-soft);
+    font-weight: 300; font-style: italic;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.05rem;
+  }
+  .problem-box strong { font-style: normal; color: var(--ink); font-weight: 500; }
+
+  /* WAITLIST */
+  .waitlist-inline {
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.75s;
+    max-width: 430px;
+  }
+  .waitlist-label {
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--sage); font-weight: 500; margin-bottom: 0.85rem;
+  }
+  .waitlist-form {
+    display: flex; gap: 0;
+    border: 1px solid var(--ink);
+  }
+  .waitlist-input {
+    flex: 1; padding: 1rem 1.2rem;
+    font-family: 'Jost', sans-serif; font-size: 0.88rem;
+    font-weight: 300; color: var(--ink);
+    background: white; border: none; outline: none;
+  }
+  .waitlist-input::placeholder { color: rgba(26,23,20,0.32); }
+  .waitlist-btn {
+    background: var(--ink); color: var(--cream);
+    border: none; padding: 1rem 1.6rem;
+    font-family: 'Jost', sans-serif; font-size: 0.75rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; font-weight: 400;
+    transition: background 0.3s; white-space: nowrap;
+  }
+  .waitlist-btn:hover { background: var(--gold); }
+  .waitlist-note {
+    font-size: 0.73rem; color: var(--ink-soft);
+    opacity: 0.55; margin-top: 0.75rem;
+    font-weight: 300; font-style: italic;
+  }
+  .waitlist-success {
+    display: none; padding: 1rem 1.2rem;
+    background: var(--parchment); border: 1px solid var(--gold);
+    font-size: 1rem; color: var(--ink); font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  /* ─── HERO RIGHT ─── */
+  .hero-right {
+    background: var(--parchment);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 8rem 3rem 6rem;
+    flex-direction: column; gap: 0;
+  }
+  .hero-right::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(26,23,20,0.04) 30px, rgba(26,23,20,0.04) 31px);
+  }
+
+  /* GENERATOR UI */
+  .generator-ui {
+    width: 100%; max-width: 400px; position: relative; z-index: 2;
+    opacity: 0; animation: fadeIn 1s ease forwards 1s;
+  }
+  .generator-label {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink-faint); font-weight: 500; margin-bottom: 0.7rem;
+  }
+  .generator-textarea {
+    width: 100%; padding: 1.1rem 1.2rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+    font-style: italic; line-height: 1.65;
+    color: var(--ink); background: white;
+    border: 1px solid var(--border); outline: none; resize: none;
+    height: 90px; font-weight: 300;
+  }
+
+  /* SOCIAL POSTS */
+  .social-posts {
+    display: flex; flex-direction: column; gap: 0.9rem;
+    opacity: 0; animation: fadeIn 1s ease forwards 1.6s;
+    width: 100%; max-width: 400px; position: relative; z-index: 2;
+  }
+
+  /* FACEBOOK POST */
+  .fb-post {
+    background: #fff; border: 1px solid #ddd;
+    border-radius: 8px; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+  }
+  .fb-post-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px 8px;
+  }
+  .fb-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #b8903c, #d4a84b);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; color: white; font-weight: 500; flex-shrink: 0;
+  }
+  .fb-post-meta { flex: 1; }
+  .fb-name { font-size: 0.82rem; font-weight: 600; color: #1c1e21; }
+  .fb-time { font-size: 0.72rem; color: #65676b; }
+  .fb-logo { margin-left: auto; }
+  .fb-logo-icon {
+    width: 22px; height: 22px; background: var(--fb-blue);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 0.75rem; font-weight: 700;
+  }
+  .fb-post-body { padding: 4px 14px 10px; }
+  .fb-text {
+    font-size: 0.82rem; line-height: 1.55; color: #1c1e21;
+    min-height: 40px;
+  }
+  .fb-post-stats {
+    padding: 6px 14px; border-top: 1px solid #e4e6ea;
+    border-bottom: 1px solid #e4e6ea;
+    display: flex; justify-content: space-between;
+    font-size: 0.72rem; color: #65676b;
+  }
+  .fb-reactions span { margin-right: 2px; }
+  .fb-actions {
+    display: flex; padding: 2px 4px;
+  }
+  .fb-action-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    gap: 5px; padding: 7px; border: none; background: none;
+    cursor: pointer; border-radius: 4px;
+    font-size: 0.77rem; color: #65676b; font-weight: 600;
+    transition: background 0.15s; font-family: inherit;
+  }
+  .fb-action-btn:hover { background: #f0f2f5; }
+  .fb-action-btn.liked { color: var(--fb-blue); }
+
+  /* INSTAGRAM POST */
+  .ig-post {
+    background: #fff; border: 1px solid #dbdbdb;
+    border-radius: 8px; overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+  }
+  .ig-post-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+  }
+  .ig-avatar-wrap {
+    padding: 2px; border-radius: 50%;
+    background: var(--ig-gradient); flex-shrink: 0;
+  }
+  .ig-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #fff; padding: 2px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ig-avatar-inner {
+    width: 100%; height: 100%; border-radius: 50%;
+    background: linear-gradient(135deg, #b8903c, #d4a84b);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.72rem; color: white; font-weight: 500;
+  }
+  .ig-name { font-size: 0.8rem; font-weight: 600; color: #262626; flex: 1; }
+  .ig-logo-icon {
+    width: 22px; height: 22px; background: var(--ig-gradient);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 0.65rem; font-weight: 700;
+  }
+  .ig-post-image {
+    width: 100%; aspect-ratio: 1;
+    background: var(--parchment-warm);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0;
+  }
+  .ig-post-image::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(184,144,60,0.04) 20px, rgba(184,144,60,0.04) 40px);
+  }
+  .ig-quote-card {
+    padding: 1.5rem; text-align: center; position: relative; z-index: 1;
+  }
+  .ig-quote-text {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 0.95rem; line-height: 1.65; color: var(--ink);
+    font-weight: 300; min-height: 60px;
+  }
+  .ig-quote-ornament {
+    font-size: 1.6rem; color: var(--gold); opacity: 0.5; margin-bottom: 0.5rem;
+  }
+  .ig-quote-author {
+    font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); margin-top: 0.8rem; font-weight: 500;
+  }
+  .ig-actions {
+    padding: 8px 12px 2px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .ig-action { cursor: pointer; font-size: 1rem; }
+  .ig-action.liked { color: #ed4956; }
+  .ig-saves { margin-left: auto; }
+  .ig-likes {
+    padding: 0 12px; font-size: 0.78rem; font-weight: 600; color: #262626;
+  }
+  .ig-caption {
+    padding: 2px 12px 10px;
+    font-size: 0.77rem; line-height: 1.5; color: #262626;
+    min-height: 30px;
+  }
+  .ig-caption strong { font-weight: 600; }
+  .ig-hashtags { color: #00376b; margin-top: 3px; font-size: 0.73rem; }
+
+  /* ─── DIVIDERS ─── */
+  .divider {
+    display: flex; align-items: center; gap: 1.5rem;
+    padding: 0 5.5rem; margin: 1rem 0 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-symbol { color: var(--gold); font-size: 0.7rem; letter-spacing: 0.3em; }
+
+  /* ─── SECTIONS ─── */
+  .section-inner { max-width: 1100px; margin: 0 auto; padding: 4rem 5.5rem; }
+
+  .section-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; margin-bottom: 1.3rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .section-eyebrow::before {
+    content: ''; width: 22px; height: 1px; background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4vw, 3.5rem);
+    font-weight: 300; line-height: 1.2; color: var(--ink);
+    margin-bottom: 1.4rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-body {
+    font-size: 1rem; line-height: 1.8; color: var(--ink-soft);
+    font-weight: 300; max-width: 560px; margin-bottom: 3.5rem;
+  }
+
+  /* ─── FOR WHOM ─── */
+  .pour-qui { background: var(--parchment); }
+  .pour-qui-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--border); margin-top: 1.5rem;
+  }
+  .pour-qui-card {
+    background: var(--parchment); padding: 2.2rem 1.8rem;
+    position: relative; overflow: hidden;
+    transition: background 0.3s;
+  }
+  .pour-qui-card:hover { background: white; }
+  .pour-qui-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: transparent; transition: background 0.3s;
+  }
+  .pour-qui-card:hover::before { background: var(--gold); }
+  .pq-icon { font-size: 1.6rem; margin-bottom: 1.2rem; opacity: 0.7; }
+  .pq-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 500; color: var(--ink);
+    margin-bottom: 0.7rem; line-height: 1.3;
+  }
+  .pq-text {
+    font-size: 0.84rem; line-height: 1.65; color: var(--ink-soft);
+    font-weight: 300;
+  }
+
+  /* ─── STEPS ─── */
+  .steps { background: var(--cream); }
+  .steps-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    position: relative; margin-top: 2rem;
+  }
+  .steps-grid::before {
+    content: ''; position: absolute;
+    top: 2.2rem; left: calc(33.333% - 0px); right: calc(33.333% - 0px);
+    height: 1px; background: var(--border-gold); z-index: 0;
+  }
+  .step {
+    padding: 2.5rem 2.5rem 2.5rem 0;
+    border-right: 1px solid var(--border);
+    position: relative; z-index: 1;
+  }
+  .step:last-child { border-right: none; padding-right: 0; padding-left: 2.5rem; }
+  .step:nth-child(2) { padding-left: 2.5rem; }
+  .step-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300; color: var(--gold);
+    opacity: 0.4; line-height: 1; margin-bottom: 1.2rem;
+  }
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 500; color: var(--ink);
+    margin-bottom: 0.8rem;
+  }
+  .step-text {
+    font-size: 0.85rem; line-height: 1.7; color: var(--ink-soft);
+    font-weight: 300;
+  }
+
+  /* ─── QUOTE ─── */
+  .quote-section {
+    padding: 3.5rem 5.5rem; background: var(--ink);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .quote-section::before {
+    content: '❝';
+    position: absolute; font-family: 'Cormorant Garamond', serif;
+    font-size: 20rem; color: rgba(255,255,255,0.025);
+    top: -2rem; left: 3rem; line-height: 1;
+    pointer-events: none;
+  }
+  .big-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 3vw, 2.5rem);
+    font-weight: 300; font-style: italic;
+    color: var(--parchment); line-height: 1.4;
+    max-width: 750px; margin: 0 auto 1.5rem;
+    position: relative; z-index: 1;
+  }
+  .quote-author {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500;
+    position: relative; z-index: 1;
+  }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials { background: var(--parchment-warm); }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  }
+  .testimonial {
+    background: var(--cream); padding: 2.2rem;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .testimonial::before {
+    content: '❝';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; color: var(--gold); opacity: 0.3;
+    line-height: 1; display: block; margin-bottom: 0.3rem;
+  }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem; font-style: italic;
+    line-height: 1.7; color: var(--ink-soft);
+    font-weight: 300; margin-bottom: 1.5rem;
+  }
+  .testimonial-author {
+    font-size: 0.85rem; font-weight: 500; color: var(--ink); margin-bottom: 0.2rem;
+  }
+  .testimonial-role {
+    font-size: 0.75rem; color: var(--sage); font-weight: 300; font-style: italic;
+  }
+
+  /* ─── PRICING ─── */
+  .pricing-card-wrap {
+    display: flex; justify-content: center; margin-top: 0.5rem;
+  }
+  .pricing-card {
+    background: var(--ink); color: var(--cream);
+    padding: 3.5rem 4rem;
+    border: 1px solid var(--ink);
+    max-width: 460px; width: 100%; text-align: center;
+    position: relative;
+  }
+  .pricing-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: var(--gold);
+  }
+  .pricing-badge-wrap {
+    display: flex; justify-content: center; margin-bottom: 2rem;
+  }
+  .pricing-badge {
+    display: inline-block;
+    background: var(--gold); color: var(--ink);
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 0.35rem 1.1rem; font-weight: 500;
+  }
+  .pricing-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(250,248,244,0.6); margin-bottom: 1.5rem; font-weight: 300;
+  }
+  .pricing-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5rem; font-weight: 300; color: var(--cream);
+    line-height: 1; display: inline-block;
+  }
+  .pricing-price-sup { font-size: 1.8rem; vertical-align: top; margin-top: 0.8rem; }
+  .pricing-period {
+    font-size: 0.78rem; color: rgba(250,248,244,0.5);
+    letter-spacing: 0.1em; margin-top: 0.4rem; margin-bottom: 2.5rem;
+  }
+  .pricing-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 2rem; }
+  .pricing-features {
+    list-style: none; text-align: left; margin-bottom: 2.5rem;
+  }
+  .pricing-features li {
+    font-size: 0.88rem; color: rgba(250,248,244,0.8);
+    padding: 0.65rem 0; font-weight: 300;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .pricing-features li::before {
+    content: '✦'; color: var(--gold); font-size: 0.55rem; flex-shrink: 0;
+  }
+  .pricing-cta {
+    display: block; background: var(--gold); color: var(--ink);
+    padding: 1rem; text-align: center;
+    font-family: 'Jost', sans-serif; font-size: 0.78rem;
+    letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
+    font-weight: 500; transition: background 0.3s;
+  }
+  .pricing-cta:hover { background: var(--gold-light); }
+  .pricing-note {
+    font-size: 0.75rem; color: var(--ink-soft); font-style: italic;
+    margin-top: 1.8rem; font-weight: 300; text-align: center;
+  }
+
+  /* ─── FINAL CTA ─── */
+  .final-cta {
+    background: var(--parchment); padding: 4.5rem 5.5rem;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .final-cta::before {
+    content: 'MUSAE';
+    position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18rem; font-weight: 600; letter-spacing: 0.1em;
+    color: rgba(26,23,20,0.03);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none; white-space: nowrap;
+  }
+  .final-cta .section-eyebrow { justify-content: center; }
+  .final-cta .section-title { text-align: center; }
+  .final-cta .section-body { margin: 0 auto 3rem; text-align: center; }
+  .waitlist-block {
+    max-width: 480px; margin: 0 auto;
+    position: relative; z-index: 2;
+  }
+  .counter {
+    margin-top: 1.8rem;
+    font-size: 0.82rem; color: var(--ink-soft); font-weight: 300;
+  }
+  .counter strong {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 500; color: var(--gold);
+  }
+  .counter-bar {
+    height: 2px; background: var(--border);
+    margin: 1rem 0 0; border-radius: 0; overflow: hidden;
+  }
+  .counter-bar-fill {
+    height: 100%; width: 47%;
+    background: var(--gold); animation: fillBar 2s ease forwards 1.5s;
+    transform-origin: left; transform: scaleX(0);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 2.5rem 5.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 300; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--parchment);
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-tagline {
+    font-size: 0.7rem; letter-spacing: 0.12em; color: rgba(250,248,244,0.35);
+    font-weight: 300; margin-top: 0.3rem; font-style: italic;
+  }
+  .footer-links { display: flex; gap: 2rem; align-items: center; }
+  .footer-link {
+    font-size: 0.73rem; letter-spacing: 0.1em; color: rgba(250,248,244,0.45);
+    text-decoration: none; font-weight: 300; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: var(--gold); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes fillBar {
+    from { transform: scaleX(0); } to { transform: scaleX(1); }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; } 50% { opacity: 0; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  .typing-cursor::after {
+    content: '|'; animation: blink 0.85s infinite;
+    color: var(--gold);
+  }
+
+  /* ─── USE CASES PILLS ─── */
+  .use-cases {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin-bottom: 2.2rem;
+    opacity: 0; animation: fadeUp 0.8s ease forwards 0.65s;
+  }
+  .use-case {
+    font-size: 0.75rem; font-weight: 400;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border-gold);
+    color: var(--ink-soft);
+    background: var(--gold-pale);
+    white-space: nowrap;
+  }
+
+  /* ─── AI BADGE ─── */
+  .ai-badge {
+    display: inline-block;
+    background: var(--ink); color: var(--gold);
+    font-size: 0.7rem; letter-spacing: 0.1em;
+    padding: 0.45rem 1rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+  }
+  .generator-arrow {
+    text-align: center; padding: 0.6rem 0;
+  }
+
+  /* ─── SOCIAL POSTS LABEL ─── */
+  .social-posts-label {
+    font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--sage); font-weight: 500;
+    text-align: center; margin-bottom: 0.7rem;
+    opacity: 0; animation: fadeIn 1s ease forwards 1.6s;
+  }
+
+  /* ─── MOBILE RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-right .nav-link { display: none; }
+    .nav-cta { padding: 0.55rem 1.1rem; font-size: 0.68rem; }
+
+    .hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+    .hero-left {
+      padding: 7rem 1.6rem 2.5rem;
+      order: 1;
+    }
+    .hero-right {
+      order: 2;
+      padding: 2rem 1.6rem 3rem;
+      min-height: auto;
+    }
+    .hero-title { font-size: 2.4rem; margin-bottom: 1.8rem; }
+    .problem-box { max-width: 100%; }
+    .use-cases { gap: 0.4rem; }
+    .use-case { font-size: 0.7rem; padding: 0.35rem 0.75rem; }
+    .waitlist-inline { max-width: 100%; }
+    .waitlist-form { flex-direction: column; }
+    .waitlist-input { border-bottom: 1px solid var(--ink); }
+    .waitlist-btn { padding: 0.9rem; text-align: center; }
+
+    .generator-ui, .social-posts { max-width: 100%; }
+
+    .divider { padding: 0 1.6rem; margin: 0.5rem 0 0; }
+
+    .section-inner { padding: 2.5rem 1.6rem; }
+    .section-title { font-size: 2rem; }
+
+    .pour-qui-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+    }
+    .pour-qui-card { padding: 1.6rem 1.2rem; }
+
+    .steps-grid { grid-template-columns: 1fr; gap: 0; }
+    .step {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 0;
+    }
+    .step:last-child { border-bottom: none; padding-left: 0; }
+    .step:nth-child(2) { padding-left: 0; }
+
+    .testimonials-grid { grid-template-columns: 1fr; gap: 1rem; }
+
+    .pricing-card { padding: 2.5rem 2rem; }
+    .pricing-price { font-size: 4rem; }
+
+    .quote-section { padding: 2.5rem 1.6rem; }
+    .big-quote { font-size: 1.5rem; }
+
+    .final-cta { padding: 4rem 1.6rem; }
+    .waitlist-block { max-width: 100%; }
+    .waitlist-block .waitlist-form { flex-direction: column; }
+
+    footer {
+      padding: 2rem 1.6rem;
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+    .footer-links { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+  }
+
+  @media (max-width: 420px) {
+    .hero-title { font-size: 2rem; }
+    .pour-qui-grid { grid-template-columns: 1fr; }
+    .section-title { font-size: 1.75rem; }
+    .pricing-card { padding: 2rem 1.5rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Mu<span>s</span>ae</a>
+  <div class="nav-right">
+    <a href="#fonctionnement" class="nav-link">Comment ça marche</a>
+    <a href="#tarifs" class="nav-link">Tarifs</a>
+    <a href="#waitlist" class="nav-cta">Rejoindre la liste</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Vos réseaux sociaux, gérés automatiquement par l'IA</p>
+    <h1 class="hero-title">
+      Vous écrivez.<br>
+      <em>Musae publie sur<br>vos réseaux.</em>
+    </h1>
+
+    <div class="problem-box">
+      <p>
+        Vous sortez un nouveau livre ? Vous participez à un salon ce mois-ci ? Vous avez un extrait à partager ?<br><br>
+        <strong>Musae transforme ces moments en publications Facebook et Instagram.</strong><br>
+        Vous tapez deux mots. L'IA rédige, formate et publie. Vous ne touchez plus aux réseaux.
+      </p>
+    </div>
+
+    <div class="use-cases">
+      <span class="use-case">📖 Sortie de livre</span>
+      <span class="use-case">🎪 Présence à un salon</span>
+      <span class="use-case">✍️ Extrait du jour</span>
+      <span class="use-case">💬 Avis de lecteur</span>
+      <span class="use-case">🎉 Anniversaire de parution</span>
+    </div>
+
+    <div class="waitlist-inline">
+      <p class="waitlist-label">Rejoindre la liste d'attente</p>
+      <div class="waitlist-form" id="form-hero">
+        <input type="email" class="waitlist-input" placeholder="votre@email.fr" id="email-hero">
+        <button class="waitlist-btn" onclick="submitWaitlist('hero')">Je m'inscris</button>
+      </div>
+      <div class="waitlist-success" id="success-hero">
+        Bienvenue. Vous serez parmi les premiers à découvrir Musae. ✦
+      </div>
+      <p class="waitlist-note">14 jours gratuits à l'ouverture — aucune carte requise.</p>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="generator-ui">
+      <p class="generator-label">① Vous donnez un contenu brut à Musae</p>
+      <textarea class="generator-textarea typing-cursor" id="mockup-text" readonly placeholder=""></textarea>
+      <div class="generator-arrow">
+        <div class="ai-badge">✦ L'IA de Musae génère vos posts en quelques secondes</div>
+        <div style="font-size:1.4rem;color:var(--gold);opacity:0.7;margin-top:0.3rem;">↓</div>
+      </div>
+    </div>
+
+    <div class="social-posts-label">② Vos publications prêtes pour Facebook &amp; Instagram</div>
+    <div class="social-posts">
+      <!-- Facebook post -->
+      <div class="fb-post">
+        <div class="fb-post-header">
+          <div class="fb-avatar">M</div>
+          <div class="fb-post-meta">
+            <div class="fb-name">Marie-Claire Beaumont</div>
+            <div class="fb-time">Il y a 2 heures · <span>🌐</span></div>
+          </div>
+          <div class="fb-logo"><div class="fb-logo-icon">f</div></div>
+        </div>
+        <div class="fb-post-body">
+          <p class="fb-text" id="fb-text">La solitude dont on parle si peu : celle qui nourrit, qui construit, qui révèle. C'est dans ce silence choisi que naissent les mots.</p>
+        </div>
+        <div class="fb-post-stats">
+          <span><span>❤️</span><span>👍</span> 34</span>
+          <span>12 commentaires</span>
+        </div>
+        <div class="fb-actions">
+          <button class="fb-action-btn liked">👍 J'aime</button>
+          <button class="fb-action-btn">💬 Commenter</button>
+          <button class="fb-action-btn">↗ Partager</button>
+        </div>
+      </div>
+
+      <!-- Instagram post -->
+      <div class="ig-post">
+        <div class="ig-post-header">
+          <div class="ig-avatar-wrap">
+            <div class="ig-avatar"><div class="ig-avatar-inner">M</div></div>
+          </div>
+          <span class="ig-name">marie_beaumont_autrice</span>
+          <div class="ig-logo-icon">▶</div>
+        </div>
+        <div class="ig-post-image">
+          <div class="ig-quote-card">
+            <div class="ig-quote-ornament">✦</div>
+            <p class="ig-quote-text" id="ig-text">Être présent à soi-même avant d'être présent aux autres. L'écriture enseigne ça mieux que tout.</p>
+            <p class="ig-quote-author">Marie-Claire Beaumont</p>
+          </div>
+        </div>
+        <div class="ig-actions">
+          <span class="ig-action liked">❤️</span>
+          <span class="ig-action">💬</span>
+          <span class="ig-action">✈️</span>
+          <span class="ig-action ig-saves">🔖</span>
+        </div>
+        <p class="ig-likes">142 mentions J'aime</p>
+        <p class="ig-caption" id="ig-caption">
+          <strong>marie_beaumont_autrice</strong> Ce que l'écriture m'a appris sur la présence à soi...<br>
+          <span class="ig-hashtags">#écriture #autrice #livres #littérature #roman</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-symbol">✦</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- POUR QUI -->
+<section class="pour-qui" id="pour-qui">
+  <div class="section-inner" style="padding-bottom: 0;">
+    <p class="section-eyebrow reveal">Pour qui ?</p>
+    <h2 class="section-title reveal">Musae est fait pour vous<br><em>si vous vous reconnaissez ici.</em></h2>
+  </div>
+  <div class="section-inner" style="padding-top: 2rem;">
+    <div class="pour-qui-grid reveal">
+      <div class="pour-qui-card">
+        <div class="pq-icon">📚</div>
+        <h3 class="pq-title">Auteur publié</h3>
+        <p class="pq-text">Votre éditeur vous le dit : il faut être visible. Mais votre énergie appartient à votre prochain livre, pas à des publications quotidiennes.</p>
+      </div>
+      <div class="pour-qui-card">
+        <div class="pq-icon">✍️</div>
+        <h3 class="pq-title">Auto-édition</h3>
+        <p class="pq-text">Vous portez tout : l'écriture, la correction, la diffusion. La communication est la dernière chose à laquelle vous pensez — et la première que les lecteurs voient.</p>
+      </div>
+      <div class="pour-qui-card">
+        <div class="pq-icon">⏳</div>
+        <h3 class="pq-title">Manque de temps</h3>
+        <p class="pq-text">Vous avez des idées, un style, une voix. Mais entre la vie et l'écriture, il ne reste rien pour les réseaux. Musae comble exactement cet espace.</p>
+      </div>
+      <div class="pour-qui-card">
+        <div class="pq-icon">📵</div>
+        <h3 class="pq-title">Le numérique vous rebute</h3>
+        <p class="pq-text">Algorithmes, stories, reels — un monde qui n'est pas le vôtre. Musae traduit votre univers littéraire en présence sociale, sans que vous ayez à le comprendre.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-symbol">✦</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- STEPS -->
+<section class="steps" id="fonctionnement">
+  <div class="section-inner" style="padding-bottom: 0;">
+    <p class="section-eyebrow reveal">Comment ça marche</p>
+    <h2 class="section-title reveal">Trois gestes.<br><em>C'est tout.</em></h2>
+  </div>
+  <div class="section-inner" style="padding-top: 2rem;">
+    <div class="steps-grid reveal">
+      <div class="step">
+        <div class="step-number">01</div>
+        <h3 class="step-title">Déposez votre contenu</h3>
+        <p class="step-text">Un extrait de roman, une pensée du matin, une photo de couverture. Musae accepte tout ce qui vous inspire — texte ou image.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">02</div>
+        <h3 class="step-title">Choisissez vos posts</h3>
+        <p class="step-text">En quelques secondes, Musae génère plusieurs propositions pour Facebook et Instagram — dans votre ton, votre voix, votre style littéraire.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">03</div>
+        <h3 class="step-title">Publiez. Ou laissez faire.</h3>
+        <p class="step-text">Décidez une seule fois de votre rythme. Musae maintient votre présence, régulièrement, même quand vous écrivez.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section">
+  <blockquote class="big-quote">
+    Un auteur n'a pas à devenir spécialiste des réseaux sociaux pour être lu.
+  </blockquote>
+  <p class="quote-author">La philosophie Musae</p>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-inner">
+    <p class="section-eyebrow reveal">Ce que disent nos auteurs</p>
+    <h2 class="section-title reveal">Ils écrivent.<br><em>Musae communique.</em></h2>
+    <div class="testimonials-grid reveal">
+      <div class="testimonial">
+        <p class="testimonial-text">Je n'aurais jamais cru qu'un outil numérique pourrait parler à ma place sans que je le reconnaisse. Musae a compris mon style en quelques jours.</p>
+        <p class="testimonial-author">Marie-Claire B.</p>
+        <p class="testimonial-role">Romancière, 4 romans publiés</p>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">J'avais abandonné les réseaux depuis deux ans. Musae m'a redonné une présence que je peux assumer — sans y passer de temps.</p>
+        <p class="testimonial-author">Henri D.</p>
+        <p class="testimonial-role">Auteur d'essais historiques</p>
+      </div>
+      <div class="testimonial">
+        <p class="testimonial-text">Simple. Discret. Efficace. Exactement ce dont j'avais besoin entre deux chapitres.</p>
+        <p class="testimonial-author">Sophie M.</p>
+        <p class="testimonial-role">Poète et conférencière</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="tarifs">
+  <div class="section-inner">
+    <p class="section-eyebrow reveal">Tarifs</p>
+    <h2 class="section-title reveal">Un seul plan.<br><em>Tout inclus.</em></h2>
+    <p class="section-body reveal">Pas de niveaux. Pas de surprises. Un accès complet à Musae pour un prix fixe.</p>
+    <div class="pricing-card-wrap reveal">
+      <div class="pricing-card">
+        <div class="pricing-badge-wrap">
+          <span class="pricing-badge">Accès complet</span>
+        </div>
+        <p class="pricing-name">Musae — Plan unique</p>
+        <div>
+          <span class="pricing-price-sup">€</span><span class="pricing-price">20</span>
+        </div>
+        <p class="pricing-period">par mois · sans engagement</p>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>Génération de posts par IA</li>
+          <li>Facebook &amp; Instagram inclus</li>
+          <li>Publications illimitées</li>
+          <li>Adaptation à votre style d'écriture</li>
+          <li>Programmation automatique</li>
+          <li>Interface pensée pour les non-techniciens</li>
+        </ul>
+        <a href="https://tally.so/r/obAYvX" target="_blank" class="pricing-cta">Commencer 14 jours gratuits</a>
+      </div>
+    </div>
+    <p class="pricing-note reveal">14 jours d'essai gratuit à l'ouverture — aucune carte bancaire requise.</p>
+  </div>
+</section>
+
+<!-- FINAL WAITLIST -->
+<section class="final-cta" id="waitlist">
+  <p class="section-eyebrow" style="position:relative;z-index:2;">Bientôt disponible</p>
+  <h2 class="section-title" style="position:relative;z-index:2;">Soyez parmi<br><em>les premiers.</em></h2>
+  <p class="section-body" style="position:relative;z-index:2;max-width:500px;margin:0 auto 3rem;">
+    Musae ouvre ses portes très prochainement. Rejoignez la liste pour être prévenu en priorité — et bénéficier d'un tarif de lancement exclusif.
+  </p>
+
+  <div class="waitlist-block">
+    <div class="waitlist-form" id="form-final">
+      <input type="email" class="waitlist-input" placeholder="votre@email.fr" id="email-final">
+      <button class="waitlist-btn" onclick="submitWaitlist('final')">Je rejoins la liste</button>
+    </div>
+    <div class="waitlist-success" id="success-final">
+      C'est noté. Vous serez parmi les premiers à découvrir Musae. ✦
+    </div>
+    <p class="waitlist-note" style="text-align:center;">Aucun spam. Un seul email à l'ouverture.</p>
+    <div class="counter">
+      <strong id="counter-number">47</strong> auteurs déjà inscrits sur la liste d'attente
+      <div class="counter-bar">
+        <div class="counter-bar-fill"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">Mu<span>s</span>ae</div>
+    <div class="footer-tagline">L'assistant invisible des auteurs</div>
+  </div>
+  <div class="footer-links">
+    <a href="#" class="footer-link">Confidentialité</a>
+    <a href="#" class="footer-link">Conditions</a>
+    <a href="/cdn-cgi/l/email-protection#14777b7a607577605479616775713a7d7b" class="footer-link"><span class="__cf_email__" data-cfemail="34575b5a405557407459414755511a5d5b">[email&#160;protected]</span></a>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.01, rootMargin: '0px 0px -20px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Fallback: reveal all elements that are already in view on load
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 100) {
+        el.classList.add('visible');
+      }
+    });
+  }, 300);
+
+  // Typing animation
+  const textarea = document.getElementById('mockup-text');
+  const fbText = document.getElementById('fb-text');
+  const igText = document.getElementById('ig-text');
+
+  const inputText = '"La solitude de l\'écrivain n\'est pas une absence — c\'est une présence à soi-même que peu de gens osent vraiment habiter."';
+  const fbOutput = 'La solitude dont on parle si peu : celle qui nourrit, qui construit, qui révèle. C\'est dans ce silence choisi que naissent les mots. Partagez si vous vous reconnaissez... ✍️';
+  const igOutput = 'Être présent à soi-même avant d\'être présent aux autres. L\'écriture enseigne ça mieux que tout.';
+
+  let i = 0;
+  textarea.classList.add('typing-cursor');
+
+  setTimeout(() => {
+    const type = () => {
+      if (i < inputText.length) {
+        textarea.value += inputText[i++];
+        setTimeout(type, 28);
+      } else {
+        textarea.classList.remove('typing-cursor');
+        // Animate output posts
+        setTimeout(() => {
+          fbText.textContent = '';
+          igText.textContent = '';
+          let j = 0, k = 0;
+          const typeFb = () => { if (j < fbOutput.length) { fbText.textContent += fbOutput[j++]; setTimeout(typeFb, 18); } };
+          const typeIg = () => { if (k < igOutput.length) { igText.textContent += igOutput[k++]; setTimeout(typeIg, 24); } };
+          typeFb();
+          setTimeout(typeIg, 400);
+        }, 600);
+      }
+    };
+    type();
+  }, 1600);
+
+  // Waitlist — redirect to Tally
+  function submitWaitlist(source) {
+    const emailInput = document.getElementById('email-' + source);
+    const email = emailInput ? emailInput.value.trim() : '';
+
+    const TALLY_URL = 'https://tally.so/r/obAYvX';
+
+    if (email && email.includes('@')) {
+      window.open(TALLY_URL + '?email=' + encodeURIComponent(email), '_blank');
+      document.getElementById('form-' + source).style.display = 'none';
+      document.getElementById('success-' + source).style.display = 'block';
+      const counter = document.getElementById('counter-number');
+      if (counter) counter.textContent = parseInt(counter.textContent) + 1;
+    } else {
+      if (emailInput) {
+        emailInput.style.outline = '2px solid #c0392b';
+        emailInput.focus();
+        setTimeout(() => emailInput.style.outline = 'none', 2000);
+      } else {
+        window.open(TALLY_URL, '_blank');
+      }
+    }
+  }
+
+  // Enter key
+  document.querySelectorAll('.wait
