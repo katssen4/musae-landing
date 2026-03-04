@@ -1010,7 +1010,7 @@
           <li>Programmation automatique</li>
           <li>Interface pensée pour les non-techniciens</li>
         </ul>
-        <a href="https://tally.so/r/obAYvX" target="_blank" class="pricing-cta">Commencer 14 jours gratuits</a>
+        <a href="#waitlist" class="pricing-cta">Commencer 14 jours gratuits</a>
       </div>
     </div>
     <p class="pricing-note reveal">14 jours d'essai gratuit à l'ouverture — aucune carte bancaire requise.</p>
@@ -1056,9 +1056,17 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+  // ─── Supabase client ───
+  var sb = window.supabase.createClient(
+    'https://fhowsdmfqgrarxqrvipp.supabase.co',
+    'sb_publishable_9xwSFIKgwxgYVHy45LH9TQ_9bLnwoTQ'
+  );
+
   // Scroll reveal
-  // Reveal all on load
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
 
   // Typing animation
@@ -1080,7 +1088,6 @@
         setTimeout(type, 28);
       } else {
         textarea.classList.remove('typing-cursor');
-        // Animate output posts
         setTimeout(() => {
           fbText.textContent = '';
           igText.textContent = '';
@@ -1095,29 +1102,79 @@
     type();
   }, 1600);
 
-  // Waitlist — redirect to Tally
-  function submitWaitlist(source) {
+  // ─── Waitlist — envoi direct dans Supabase ───
+  async function submitWaitlist(source) {
     const emailInput = document.getElementById('email-' + source);
     const email = emailInput ? emailInput.value.trim() : '';
+    const btn = document.querySelector('#form-' + source + ' .waitlist-btn');
 
-    const TALLY_URL = 'https://tally.so/r/obAYvX';
-
-    if (email && email.includes('@')) {
-      window.open(TALLY_URL + '?email=' + encodeURIComponent(email), '_blank');
-      document.getElementById('form-' + source).style.display = 'none';
-      document.getElementById('success-' + source).style.display = 'block';
-      const counter = document.getElementById('counter-number');
-      if (counter) counter.textContent = parseInt(counter.textContent) + 1;
-    } else {
+    if (!email || !email.includes('@') || !email.includes('.')) {
       if (emailInput) {
         emailInput.style.outline = '2px solid #c0392b';
         emailInput.focus();
         setTimeout(() => emailInput.style.outline = 'none', 2000);
-      } else {
-        window.open(TALLY_URL, '_blank');
       }
+      return;
     }
+
+    // Feedback visuel
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Envoi...';
+    }
+
+    const { error } = await sb
+      .from('waitlist')
+      .insert({ email: email, source: source });
+
+    if (error) {
+      if (error.code === '23505') {
+        // Email déjà inscrit (unique constraint)
+        document.getElementById('form-' + source).style.display = 'none';
+        const successEl = document.getElementById('success-' + source);
+        successEl.textContent = 'Vous êtes déjà inscrit(e). Nous vous préviendrons à l\'ouverture. ✦';
+        successEl.style.display = 'block';
+      } else {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = source === 'hero' ? 'Je m\'inscris' : 'Je rejoins la liste';
+          btn.style.background = '#c0392b';
+          setTimeout(() => btn.style.background = '', 2000);
+        }
+        console.error('Erreur waitlist:', error.message);
+      }
+      return;
+    }
+
+    // Succès
+    document.getElementById('form-' + source).style.display = 'none';
+    document.getElementById('success-' + source).style.display = 'block';
+    const counter = document.getElementById('counter-number');
+    if (counter) counter.textContent = parseInt(counter.textContent) + 1;
   }
 
-  // Enter key
-  document.querySelectorAll('.wait
+  // Enter key sur les champs email
+  document.querySelectorAll('.waitlist-input').forEach(input => {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const source = input.id.replace('email-', '');
+        submitWaitlist(source);
+      }
+    });
+  });
+
+  // Charger le vrai compteur depuis Supabase
+  (async function loadCounter() {
+    const { count, error } = await sb
+      .from('waitlist')
+      .select('*', { count: 'exact', head: true });
+    if (!error && count !== null) {
+      const counter = document.getElementById('counter-number');
+      if (counter) counter.textContent = Math.max(count, 47);
+    }
+  })();
+</script>
+
+</body>
+</html>
