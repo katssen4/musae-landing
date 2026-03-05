@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Politique de confidentialité — Musae</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1714;
+    --ink-soft: #3d3830;
+    --ink-faint: rgba(26,23,20,0.45);
+    --parchment: #f7f3ed;
+    --parchment-warm: #ede8e0;
+    --gold: #b8903c;
+    --gold-light: #d4a84b;
+    --gold-pale: rgba(184,144,60,0.15);
+    --sage: #7a8c7e;
+    --cream: #faf8f4;
+    --border: rgba(26,23,20,0.1);
+    --border-gold: rgba(184,144,60,0.35);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; width: 100%;
+    z-index: 200;
+    padding: 1.4rem 5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(250,248,244,0.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem; font-weight: 300;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none;
+  }
+  .logo span { color: var(--gold); }
+  .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+  .nav-link {
+    font-size: 0.73rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-soft); text-decoration: none; font-weight: 400;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--ink); color: var(--cream);
+    padding: 0.6rem 1.6rem;
+    font-size: 0.73rem; letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none; font-family: 'Jost', sans-serif; font-weight: 400;
+    transition: background 0.3s, border-color 0.3s;
+    border: 1px solid var(--ink);
+  }
+  .nav-cta:hover { background: var(--gold); border-color: var(--gold); }
+
+  /* ─── CONTENU ─── */
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 9rem 2rem 6rem;
+  }
+
+  .page-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem; font-weight: 300;
+    color: var(--ink); letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .page-meta {
+    font-size: 0.78rem; color: var(--ink-faint);
+    margin-bottom: 3.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Sommaire */
+  .toc {
+    background: var(--parchment);
+    border-left: 2px solid var(--gold);
+    padding: 1.6rem 2rem;
+    margin-bottom: 3rem;
+  }
+  .toc-title {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--ink-soft); font-weight: 400;
+    margin-bottom: 1rem;
+  }
+  .toc ol {
+    list-style: decimal;
+    padding-left: 1.2rem;
+  }
+  .toc li {
+    margin-bottom: 0.4rem;
+  }
+  .toc a {
+    font-size: 0.82rem; color: var(--ink-soft);
+    text-decoration: none; font-weight: 300;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--gold); }
+
+  /* Sections */
+  section {
+    margin-bottom: 3rem;
+    scroll-margin-top: 7rem;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 400;
+    color: var(--ink); letter-spacing: 0.04em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h3 {
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-soft); font-weight: 400;
+    margin: 1.6rem 0 0.6rem;
+  }
+
+  p {
+    font-size: 0.93rem; line-height: 1.8;
+    color: var(--ink-soft); font-weight: 300;
+    margin-bottom: 0.9rem;
+  }
+
+  ul, ol {
+    padding-left: 1.4rem;
+    margin-bottom: 0.9rem;
+  }
+  li {
+    font-size: 0.93rem; line-height: 1.8;
+    color: var(--ink-soft); font-weight: 300;
+    margin-bottom: 0.3rem;
+  }
+
+  strong {
+    font-weight: 500; color: var(--ink);
+  }
+
+  a {
+    color: var(--gold);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  a:hover { opacity: 0.75; }
+
+  /* Encadrés */
+  .info-block {
+    background: var(--parchment);
+    border: 1px solid var(--border);
+    padding: 1.4rem 1.8rem;
+    margin: 1.4rem 0;
+  }
+  .info-block p { margin-bottom: 0; }
+
+  .highlight-block {
+    background: var(--gold-pale);
+    border-left: 2px solid var(--gold);
+    padding: 1.2rem 1.6rem;
+    margin: 1.4rem 0;
+  }
+  .highlight-block p { margin-bottom: 0; }
+
+  /* Table des données */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0 1.6rem;
+    font-size: 0.85rem;
+  }
+  th {
+    font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink); font-weight: 500;
+    padding: 0.7rem 1rem;
+    background: var(--parchment-warm);
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+  td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--ink-soft); font-weight: 300;
+    line-height: 1.6;
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 2.5rem 5.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 300; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--parchment);
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-tagline {
+    font-size: 0.7rem; letter-spacing: 0.12em; color: rgba(250,248,244,0.35);
+    font-weight: 300; margin-top: 0.3rem; font-style: italic;
+  }
+  .footer-links { display: flex; gap: 2rem; align-items: center; }
+  .footer-link {
+    font-size: 0.73rem; letter-spacing: 0.1em; color: rgba(250,248,244,0.45);
+    text-decoration: none; font-weight: 300; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: var(--gold); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    main { padding: 7rem 1.5rem 4rem; }
+    .page-title { font-size: 2rem; }
+    footer {
+      flex-direction: column; gap: 1.5rem; text-align: center;
+      padding: 2rem 1.5rem;
+    }
+    .footer-links { gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+    table { font-size: 0.78rem; }
+    th, td { padding: 0.6rem 0.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="/" class="logo">Mu<span>s</span>ae</a>
+  <div class="nav-right">
+    <a href="/#fonctionnement" class="nav-link">Comment ça marche</a>
+    <a href="/#tarifs" class="nav-link">Tarifs</a>
+    <a href="https://app.musae.io" class="nav-cta">Essayer gratuitement</a>
+  </div>
+</nav>
+
+<!-- CONTENU PRINCIPAL -->
+<main>
+
+  <p class="page-eyebrow">Documents légaux</p>
+  <h1 class="page-title">Politique de confidentialité</h1>
+  <p class="page-meta">Dernière mise à jour : mars 2026 &nbsp;·&nbsp; Version 1.0</p>
+
+  <!-- SOMMAIRE -->
+  <nav class="toc" aria-label="Sommaire">
+    <p class="toc-title">Sommaire</p>
+    <ol>
+      <li><a href="#responsable">Responsable du traitement</a></li>
+      <li><a href="#donnees">Données collectées</a></li>
+      <li><a href="#finalites">Finalités et bases légales</a></li>
+      <li><a href="#conservation">Durée de conservation</a></li>
+      <li><a href="#sous-traitants">Sous-traitants et transferts</a></li>
+      <li><a href="#droits">Vos droits</a></li>
+      <li><a href="#cookies">Cookies</a></li>
+      <li><a href="#mineurs">Mineurs</a></li>
+      <li><a href="#modifications">Modifications</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+  </nav>
+
+  <div class="info-block">
+    <p>Musae s'engage à protéger vos données personnelles. Cette politique explique quelles données nous collectons, pourquoi, comment elles sont protégées, et comment exercer vos droits. Elle est rédigée conformément au Règlement Général sur la Protection des Données (RGPD, UE 2016/679).</p>
+  </div>
+
+  <!-- 1. RESPONSABLE -->
+  <section id="responsable">
+    <h2>1. Responsable du traitement</h2>
+    <p>Le responsable du traitement des données collectées via le service Musae (accessible à l'adresse <strong>www.musae.io</strong>) est :</p>
+    <div class="info-block">
+      <p>
+        <strong>Musae</strong><br>
+        Représentant : Matteo Leonardi<br>
+        Contact : <a href="mailto:contact@musae.io">contact@musae.io</a>
+      </p>
+    </div>
+    <p>Pour toute question relative à la protection de vos données, vous pouvez contacter directement le responsable à l'adresse ci-dessus.</p>
+  </section>
+
+  <!-- 2. DONNÉES -->
+  <section id="donnees">
+    <h2>2. Données collectées</h2>
+    <p>Nous collectons uniquement les données strictement nécessaires au fonctionnement du service. Aucune donnée n'est collectée sans votre consentement ou sans base légale.</p>
+
+    <h3>Données de compte</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Donnée</th>
+          <th>Source</th>
+          <th>Objet</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Adresse e-mail</td>
+          <td>Saisie lors de l'inscription</td>
+          <td>Authentification, communications de service</td>
+        </tr>
+        <tr>
+          <td>Nom complet</td>
+          <td>Saisie lors de l'inscription</td>
+          <td>Personnalisation de l'interface</td>
+        </tr>
+        <tr>
+          <td>Style littéraire</td>
+          <td>Saisie dans les paramètres (optionnel)</td>
+          <td>Personnalisation des posts générés par l'IA</td>
+        </tr>
+        <tr>
+          <td>Date d'inscription</td>
+          <td>Générée automatiquement</td>
+          <td>Gestion de l'essai gratuit</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Contenu créatif</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Donnée</th>
+          <th>Source</th>
+          <th>Objet</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Textes et extraits de livres</td>
+          <td>Déposés volontairement par l'auteur</td>
+          <td>Génération de posts par l'IA</td>
+        </tr>
+        <tr>
+          <td>Images de couverture</td>
+          <td>Téléversées volontairement (optionnel)</td>
+          <td>Génération de posts illustrés</td>
+        </tr>
+        <tr>
+          <td>Posts générés</td>
+          <td>Produits par l'IA à partir de votre contenu</td>
+          <td>Archivage, planification, publication</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Données de connexion aux réseaux sociaux</h3>
+    <p>Lorsque vous connectez votre compte Facebook ou Instagram, nous stockons :</p>
+    <ul>
+      <li>Un <strong>token d'accès OAuth</strong> fourni par Meta, permettant à Musae de publier en votre nom</li>
+      <li>L'identifiant de votre Page Facebook (si applicable)</li>
+      <li>L'identifiant de votre compte Instagram professionnel (si applicable)</li>
+      <li>La date d'expiration du token</li>
+    </ul>
+    <div class="highlight-block">
+      <p><strong>Sécurité des tokens :</strong> les tokens OAuth Meta sont stockés de manière chiffrée. Ils ne sont jamais transmis à des tiers et sont utilisés exclusivement pour publier les posts que vous avez approuvés ou programmés.</p>
+    </div>
+
+    <h3>Données de paiement</h3>
+    <p>Les paiements sont gérés exclusivement par <strong>Stripe</strong>. Musae ne collecte, ne voit et ne stocke <strong>aucune donnée bancaire</strong> (numéro de carte, IBAN, etc.). Nous conservons uniquement les identifiants Stripe nécessaires à la gestion de votre abonnement (<code>customer_id</code>, <code>subscription_id</code>).</p>
+
+    <h3>Données techniques</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Donnée</th>
+          <th>Objet</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Adresse IP</td>
+          <td>Sécurité, prévention des abus (non conservée au-delà de la session)</td>
+        </tr>
+        <tr>
+          <td>Logs d'accès serveur</td>
+          <td>Débogage et maintenance technique</td>
+        </tr>
+        <tr>
+          <td>Données de navigation (cookies techniques)</td>
+          <td>Maintien de la session authentifiée</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 3. FINALITÉS -->
+  <section id="finalites">
+    <h2>3. Finalités et bases légales</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Finalité</th>
+          <th>Base légale (RGPD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Création et gestion de votre compte</td>
+          <td>Exécution du contrat (art. 6.1.b)</td>
+        </tr>
+        <tr>
+          <td>Génération de posts par intelligence artificielle</td>
+          <td>Exécution du contrat (art. 6.1.b)</td>
+        </tr>
+        <tr>
+          <td>Publication sur Facebook et Instagram</td>
+          <td>Exécution du contrat (art. 6.1.b)</td>
+        </tr>
+        <tr>
+          <td>Gestion de l'abonnement et de la facturation</td>
+          <td>Exécution du contrat (art. 6.1.b)</td>
+        </tr>
+        <tr>
+          <td>Envoi d'e-mails transactionnels (confirmation, erreurs de publication)</td>
+          <td>Exécution du contrat (art. 6.1.b)</td>
+        </tr>
+        <tr>
+          <td>Amélioration du service et analyses d'usage agrégées</td>
+          <td>Intérêt légitime (art. 6.1.f)</td>
+        </tr>
+        <tr>
+          <td>Respect des obligations légales (fiscalité, comptabilité)</td>
+          <td>Obligation légale (art. 6.1.c)</td>
+        </tr>
+        <tr>
+          <td>Communications marketing (nouvelles fonctionnalités, actualités)</td>
+          <td>Consentement (art. 6.1.a) — opt-in explicite uniquement</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="highlight-block">
+      <p><strong>Vos textes ne servent pas à entraîner nos modèles d'IA.</strong> Ils transitent via l'API Anthropic Claude uniquement pour générer vos posts, puis sont traités et stockés dans votre espace personnel. Nous n'utilisons pas votre contenu créatif à des fins d'entraînement ou d'amélioration de modèles.</p>
+    </div>
+  </section>
+
+  <!-- 4. CONSERVATION -->
+  <section id="conservation">
+    <h2>4. Durée de conservation</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Catégorie de données</th>
+          <th>Durée de conservation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Données de compte (email, nom, style)</td>
+          <td>Durée de l'abonnement + 3 ans après résiliation</td>
+        </tr>
+        <tr>
+          <td>Contenus déposés (textes, images)</td>
+          <td>Durée de l'abonnement + suppression sur demande</td>
+        </tr>
+        <tr>
+          <td>Posts générés</td>
+          <td>Durée de l'abonnement + suppression sur demande</td>
+        </tr>
+        <tr>
+          <td>Tokens OAuth Meta</td>
+          <td>Jusqu'à révocation ou expiration — supprimés à la résiliation</td>
+        </tr>
+        <tr>
+          <td>Données de facturation (identifiants Stripe)</td>
+          <td>10 ans (obligation comptable légale)</td>
+        </tr>
+        <tr>
+          <td>Logs techniques</td>
+          <td>90 jours maximum</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>À l'expiration de ces durées, vos données sont supprimées définitivement ou anonymisées de manière irréversible.</p>
+  </section>
+
+  <!-- 5. SOUS-TRAITANTS -->
+  <section id="sous-traitants">
+    <h2>5. Sous-traitants et transferts de données</h2>
+    <p>Musae fait appel aux sous-traitants suivants, sélectionnés pour leurs garanties en matière de protection des données :</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Prestataire</th>
+          <th>Rôle</th>
+          <th>Localisation des données</th>
+          <th>Garanties</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Supabase</strong></td>
+          <td>Base de données, authentification, stockage de fichiers</td>
+          <td>Union Européenne (AWS eu-west-3, Paris)</td>
+          <td>DPA signé, RGPD conforme</td>
+        </tr>
+        <tr>
+          <td><strong>Vercel</strong></td>
+          <td>Hébergement de l'application web</td>
+          <td>Union Européenne (région EU activée)</td>
+          <td>DPA signé, clauses contractuelles types</td>
+        </tr>
+        <tr>
+          <td><strong>Anthropic (Claude API)</strong></td>
+          <td>Génération de contenu par intelligence artificielle</td>
+          <td>États-Unis</td>
+          <td>DPA disponible, clauses contractuelles types UE–USA</td>
+        </tr>
+        <tr>
+          <td><strong>Stripe</strong></td>
+          <td>Gestion des paiements et abonnements</td>
+          <td>Union Européenne</td>
+          <td>DPA signé, certifié PCI-DSS</td>
+        </tr>
+        <tr>
+          <td><strong>Meta (Facebook / Instagram)</strong></td>
+          <td>Publication sur les réseaux sociaux (sur votre demande)</td>
+          <td>Selon les conditions Meta</td>
+          <td>Politique Meta RGPD — vous êtes responsable de votre compte Meta</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>Transferts hors UE :</strong> les textes que vous déposez transitent via l'API Anthropic, hébergée aux États-Unis. Ce transfert est encadré par des clauses contractuelles types (CCT) conformes à l'article 46 du RGPD. Anthropic s'engage contractuellement à ne pas utiliser ces données pour entraîner ses modèles sans accord explicite.</p>
+  </section>
+
+  <!-- 6. DROITS -->
+  <section id="droits">
+    <h2>6. Vos droits</h2>
+    <p>Conformément au RGPD, vous disposez des droits suivants sur vos données personnelles :</p>
+
+    <h3>Droit d'accès (art. 15)</h3>
+    <p>Vous pouvez demander à accéder à l'ensemble des données personnelles que nous détenons vous concernant.</p>
+
+    <h3>Droit de rectification (art. 16)</h3>
+    <p>Vous pouvez corriger des données inexactes ou incomplètes depuis votre espace personnel (Paramètres → Profil) ou par simple demande.</p>
+
+    <h3>Droit à l'effacement (art. 17)</h3>
+    <p>Vous pouvez demander la suppression de votre compte et de l'ensemble de vos données. La suppression est effective dans un délai de 30 jours, sauf pour les données soumises à obligation légale de conservation.</p>
+
+    <h3>Droit à la portabilité (art. 20)</h3>
+    <p>Vous pouvez demander l'export de vos données (textes, posts générés) dans un format lisible (JSON ou CSV).</p>
+
+    <h3>Droit d'opposition (art. 21)</h3>
+    <p>Vous pouvez vous opposer au traitement de vos données pour les finalités basées sur notre intérêt légitime (analyses d'usage) ou révoquer votre consentement aux communications marketing à tout moment.</p>
+
+    <h3>Droit à la limitation du traitement (art. 18)</h3>
+    <p>Dans certaines circonstances, vous pouvez demander la suspension temporaire du traitement de vos données.</p>
+
+    <div class="highlight-block">
+      <p>Pour exercer l'un de ces droits, contactez-nous à <a href="mailto:contact@musae.io">contact@musae.io</a>. Nous répondons dans un délai maximum de <strong>30 jours</strong>. En cas de réponse insatisfaisante, vous pouvez introduire une réclamation auprès de la <strong>CNIL</strong> (<a href="https://www.cnil.fr">www.cnil.fr</a>).</p>
+    </div>
+  </section>
+
+  <!-- 7. COOKIES -->
+  <section id="cookies">
+    <h2>7. Cookies</h2>
+    <p>Musae utilise un nombre minimal de cookies, strictement nécessaires au fonctionnement du service :</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cookie</th>
+          <th>Type</th>
+          <th>Finalité</th>
+          <th>Durée</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>sb-access-token</code></td>
+          <td>Technique (essentiel)</td>
+          <td>Maintien de votre session authentifiée (Supabase Auth)</td>
+          <td>1 heure (renouvelable)</td>
+        </tr>
+        <tr>
+          <td><code>sb-refresh-token</code></td>
+          <td>Technique (essentiel)</td>
+          <td>Renouvellement automatique de la session</td>
+          <td>60 jours</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Nous n'utilisons <strong>aucun cookie publicitaire, aucun traceur tiers, aucun outil d'analyse comportementale</strong> (Google Analytics, Mixpanel, etc.). Aucun bandeau de consentement cookies n'est donc requis pour ces cookies essentiels, conformément aux lignes directrices de la CNIL.</p>
+  </section>
+
+  <!-- 8. MINEURS -->
+  <section id="mineurs">
+    <h2>8. Mineurs</h2>
+    <p>Musae est un service destiné aux personnes majeures (18 ans et plus). Nous ne collectons pas sciemment de données relatives à des mineurs. Si vous estimez qu'un mineur a créé un compte sur notre service, contactez-nous à <a href="mailto:contact@musae.io">contact@musae.io</a> et nous supprimerons le compte dans les meilleurs délais.</p>
+  </section>
+
+  <!-- 9. MODIFICATIONS -->
+  <section id="modifications">
+    <h2>9. Modifications de cette politique</h2>
+    <p>Nous pouvons mettre à jour cette politique pour refléter des évolutions légales, réglementaires ou fonctionnelles. En cas de modification substantielle, vous serez informé par e-mail au moins 14 jours avant l'entrée en vigueur des changements.</p>
+    <p>La date de dernière mise à jour est indiquée en haut de cette page. L'utilisation du service après la date d'entrée en vigueur vaut acceptation de la politique révisée.</p>
+  </section>
+
+  <!-- 10. CONTACT -->
+  <section id="contact">
+    <h2>10. Contact</h2>
+    <p>Pour toute question relative à cette politique ou à l'exercice de vos droits :</p>
+    <div class="info-block">
+      <p>
+        <strong>Musae — Protection des données</strong><br>
+        E-mail : <a href="mailto:contact@musae.io">contact@musae.io</a><br>
+        Réponse garantie sous 30 jours
+      </p>
+    </div>
+    <p>Vous avez également le droit d'introduire une réclamation auprès de l'autorité de contrôle compétente. En France, il s'agit de la <strong>Commission Nationale de l'Informatique et des Libertés (CNIL)</strong> :</p>
+    <div class="info-block">
+      <p>
+        CNIL — 3 Place de Fontenoy, TSA 80715, 75334 Paris Cedex 07<br>
+        <a href="https://www.cnil.fr">www.cnil.fr</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">Mu<span>s</span>ae</div>
+    <div class="footer-tagline">L'assistant invisible des auteurs</div>
+  </div>
+  <div class="footer-links">
+    <a href="privacy.html" class="footer-link">Confidentialité</a>
+    <a href="#" class="footer-link">Conditions</a>
+    <a href="mailto:contact@musae.io" class="footer-link">contact@musae.io</a>
+  </div>
+</footer>
+
+</body>
+</html>
