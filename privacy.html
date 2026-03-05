@@ -108,23 +108,26 @@
   .toc {
     background: var(--parchment);
     border-left: 2px solid var(--gold);
-    padding: 1.6rem 2rem;
+    padding: 1.1rem 1.6rem;
     margin-bottom: 3rem;
   }
   .toc-title {
-    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
     color: var(--ink-soft); font-weight: 400;
-    margin-bottom: 1rem;
+    margin-bottom: 0.7rem;
   }
   .toc ol {
     list-style: decimal;
     padding-left: 1.2rem;
+    columns: 2;
+    column-gap: 2rem;
   }
   .toc li {
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.25rem;
+    break-inside: avoid;
   }
   .toc a {
-    font-size: 0.82rem; color: var(--ink-soft);
+    font-size: 0.8rem; color: var(--ink-soft);
     text-decoration: none; font-weight: 300;
     transition: color 0.2s;
   }
